@@ -1,0 +1,77 @@
+==========================================================================
+POWER ANALYSIS  (plan section 5)
+==========================================================================
+
+  Baseline (control gate_30) : 19.0201%
+  n control                    : 44,700
+  n treatment                  : 45,489
+  allocation ratio (trt/ctl)   : 1.0177
+  alpha                        : 0.05 (two-sided)
+  target power                 : 80%
+  pre-registered MDE           : 1.0 pp absolute
+
+==========================================================================
+1. RETROSPECTIVE: what could this test actually detect?
+==========================================================================
+
+  Smallest effect detectable at 80% power, given the observed n:
+    0.738 pp absolute   (3.88% relative)
+
+  Compare to the pre-registered MDE of 1.0 pp.
+
+  0.74 pp < 1.0 pp, so this test IS adequately powered for
+  the decision it is being asked to make. A null result would have been
+  informative -- evidence against an effect of 1.0pp or larger, rather than
+  an absence of evidence.
+
+  The limit, stated plainly: this test cannot resolve effects below about
+  0.74 pp. So a null result would support 'smaller than the amount we
+  said was worth shipping', NOT 'exactly zero'. Only the first claim would
+  have been available.
+
+  Power to detect the 1.0 pp MDE at the observed n : 96.63%
+
+==========================================================================
+2. PROSPECTIVE: designing this test from scratch
+==========================================================================
+
+  To detect 1.0 pp at 80% power and alpha = 0.05:
+    required per arm : 24,658
+    required total   : 49,316
+    actual total     : 90,189
+    ratio            : 1.83x the requirement
+
+  The test is over-powered relative to its own stated MDE, which is a good
+  position to be in: the finding does not hinge on a marginal sample size.
+
+  Sample size required at various effect sizes (for context):
+
+      effect (pp)    relative     n per arm   vs actual
+             0.25       1.3%       388,792       8.70x
+             0.50       2.6%        97,679       2.19x
+             0.74       3.9%        44,803       1.00x
+             1.00       5.3%        24,658       0.55x
+             1.50       7.9%        11,063       0.25x
+             2.00      10.5%         6,281       0.14x
+
+  Reading down that table is the useful part: halving the effect you want to
+  detect roughly quadruples the users you need. The 0.25pp row needs ~9x this
+  experiment's sample, which is why chasing very small retention effects is
+  usually not worth the calendar time.
+
+==========================================================================
+3. THE OBSERVED EFFECT IN THIS CONTEXT
+==========================================================================
+
+  Observed effect : -0.820 pp
+  Retrospective MDE (magnitude) : 0.738 pp
+
+  |observed| = 0.820 pp, which is ABOVE the detectable threshold.
+  That is consistent with it having reached significance, and it means the
+  finding is not a marginal artefact of an underpowered test.
+
+  It is, however, BELOW the 1.0pp we said would justify shipping -- in
+  magnitude and in the wrong direction. A negative effect smaller than the
+  MDE still argues against the change: the MDE was a bar for shipping a
+  BENEFIT, not a licence to ignore harm of the same size.
+

@@ -1,0 +1,165 @@
+==========================================================================
+SECONDARY METRIC: 1-DAY RETENTION  (supporting evidence only)
+==========================================================================
+
+  gate_30    : 44.8188%   (20,034 / 44,700)
+  gate_40    : 44.2283%   (20,119 / 45,489)
+
+  Absolute difference : -0.5905 pp
+  Relative            : -1.318%  (on a 44.82% baseline)
+  95% CI              : [-1.2392, +0.0582] pp
+  z = -1.7841, p = 0.0744
+
+  Bootstrap 95% CI    : [-1.2269, +0.0638] pp
+  P(treatment > control) in resamples : 3.8%
+
+  1-day retention shows no significant difference.
+
+  Interpretation per section 8 item 3. The pattern that would have worried us
+  is 1-day UP with 7-day flat -- novelty. That is not what happened: both
+  horizons point the same way (down).
+
+  Stated precisely, because the CI crosses zero: 1-day retention is NOT
+  significantly different (p = 0.0744, CI includes 0). This is therefore
+  weak corroboration of the primary result, not independent confirmation.
+  The honest summary is 'consistent in sign, inconclusive on its own'.
+
+  One thing worth noticing -- the harm GROWS with the horizon:
+    1-day : -0.59 pp on a 44.8% base   = -1.3% relative
+    7-day : -0.82 pp on a 19.0% base   = -4.3% relative
+
+  A gate moved later costs little by day 1 and more by day 7. That fits the
+  competing hypothesis in section 1 -- that the gate does something
+  structural whose absence compounds -- better than a novelty story, which
+  would predict the opposite shape.
+
+==========================================================================
+GUARDRAIL METRIC: TOTAL GAME ROUNDS
+==========================================================================
+
+Distribution shape (this is why the mean is not trusted on its own):
+
+                         gate_30       gate_40
+  n                    44,700.00     45,489.00
+  mean                     52.46         51.30
+  std                     256.71        103.29
+  min                       0.00          0.00
+  25th pct                  5.00          5.00
+  median                   17.00         16.00
+  75th pct                 50.00         52.00
+  95th pct                222.00        220.00
+  99th pct                493.00        492.12
+  max                  49,854.00      2,640.00
+  skewness                163.70          5.97
+  % zero rounds            4.33%         4.52%
+
+  Median 17 vs mean 52 in control: the mean sits at roughly the 75th
+  percentile. A t-test on that mean would be testing a statistic that
+  describes almost none of the players.
+
+==========================================================================
+Guardrail: outlier diagnosis
+==========================================================================
+
+  Control arm's three largest values : 49,854  2,961  2,438
+  Treatment arm's largest value      : 2,640
+
+  userid 6390605 (control) played 49,854 rounds in a 14-day window.
+  That is 16.8x the next-highest player in the dataset and works
+  out to ~3,561 rounds/day, about 148 per hour sustained
+  around the clock for two weeks. This is not a human play pattern; it is a
+  bot or a logging fault.
+
+  Why it matters for the guardrail specifically:
+    control SD    :      256.7   vs treatment      103.3
+    control skew  :      163.7   vs treatment        6.0
+  The control arm looks far more variable than the treatment arm almost
+  entirely because of this one row.
+
+  Difference in means, all data        : -1.1575 rounds
+  Difference in means, outlier removed : -0.0433 rounds
+
+  The entire mean gap is that one player. Removing a single row out of
+  90,189 moves the difference in means by 1.11 rounds and takes it to
+  approximately zero. Any guardrail conclusion resting on the mean would
+  have been a conclusion about one bot.
+
+  NOTE: outlier handling was not pre-specified. Logged as a deviation in
+  ANALYSIS_PLAN.md section 9. Both figures are reported; neither is hidden.
+
+==========================================================================
+Guardrail: bootstrap on the difference in means
+==========================================================================
+
+  Difference in means (trt - ctl) : -1.1575 rounds
+  Bootstrap 95% percentile CI     : [-4.0793, +0.9781] rounds
+  P(treatment mean > control mean) : 18.4%
+
+  The interval is wide and straddles zero. Note it is ASYMMETRIC -- the
+  bootstrap inherits the outlier, which is the honest behaviour: resamples
+  that happen to include the bot pull the control mean up sharply. This is
+  precisely the tail behaviour a normal approximation would have smoothed
+  away, and the reason the plan asked for a bootstrap here.
+
+  Same bootstrap, outlier removed : -0.0433 rounds, CI [-1.3830, +1.3245]
+  Symmetric now, and still straddling zero.
+
+==========================================================================
+Guardrail: Mann-Whitney U on the distributions
+==========================================================================
+
+  U statistic : 1,009,027,050
+  p-value     : 0.0502
+  median      : 17.0 (ctl) vs 16.0 (trt)
+
+  Common-language effect size : 0.4962
+  A randomly chosen gate_40 player plays more rounds than a randomly chosen
+  gate_30 player 49.6% of the time (50% = no difference).
+
+  Mann-Whitney tests stochastic dominance, not the mean, so it is immune to
+  the single bot. It is the more trustworthy of the two tests here.
+
+  p = 0.0502 sits essentially ON the 0.05 line. Calling that 'not
+  significant' is as arbitrary as calling p = 0.0498 significant, so this
+  verdict does not rest on the p-value. With n = 90,189 a vanishingly small
+  shift is enough to push p to the boundary; the effect size is the
+  informative quantity, and at 0.4962 it is negligible.
+
+  GUARDRAIL VERDICT: no MATERIAL degradation in engagement.
+
+  What that rests on, in order:
+    - Common-language effect size 0.4962, against 0.5 for no difference.
+      A 0.4% deviation from a coin flip is not a collapse in engagement.
+    - Medians differ by 1 round (17 vs 16).
+    - The mean gap is one bot, and vanishes when it is removed.
+    - Both bootstrap CIs on the difference in means straddle zero.
+
+  There is likely a real but tiny downward shift in rounds played: the sign
+  agrees with both retention metrics, and that consistency is itself weak
+  evidence. 'Material' is the word the plan chose, and a shift this small
+  does not meet it.
+
+  So the guardrail does not independently block a ship decision, and it does
+  not rescue the primary result either. Worth naming what the guardrail was
+  for: catching retention bought AT THE COST of engagement. Here retention
+  FELL and engagement was flat -- not the trade-off it was designed to
+  detect, and not a case where it has anything to veto.
+
+==========================================================================
+MULTIPLE COMPARISONS (Benjamini-Hochberg across the family)
+==========================================================================
+
+  metric                               p (raw)      p (BH)   signif
+  7-day retention (PRIMARY)             0.0016      0.0047     True
+  1-day retention (secondary)           0.0744      0.0744    False
+  game rounds (guardrail, MWU)          0.0502      0.0744    False
+
+  Per section 6, no correction is applied TO the primary metric -- it alone
+  drives the decision, and correcting a single pre-registered primary test
+  for the company of metrics reported beside it would be wrong. The table
+  above exists because these three are reported together, and both the raw
+  and corrected values are shown so neither is privileged silently.
+
+  The primary result survives correction comfortably, so nothing about the
+  conclusion turns on this choice.
+

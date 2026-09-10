@@ -1,0 +1,19 @@
+{
+  "baseline": 0.19020134228187918,
+  "n_control": 44700,
+  "n_treatment": 45489,
+  "retrospective_mde_abs": 0.0073761521864917495,
+  "retrospective_mde_rel": 0.038780757790658815,
+  "power_at_registered_mde": 0.9662718527509466,
+  "prospective_n_per_arm": 24658.0,
+  "prospective_n_total": 49316.0,
+  "actual_total": 90189,
+  "n_per_arm_by_effect": {
+    "0.25pp": 388792.0,
+    "0.50pp": 97679.0,
+    "0.74pp": 44803.0,
+    "1.00pp": 24658.0,
+    "1.50pp": 11063.0,
+    "2.00pp": 6281.0
+  }
+}

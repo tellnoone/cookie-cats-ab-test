@@ -1,0 +1,56 @@
+{
+  "secondary": {
+    "rate_control": 0.4481879194630872,
+    "rate_treatment": 0.44228274967574577,
+    "abs_diff": -0.005905169787341458,
+    "ci": [
+      -0.012392439449445217,
+      0.0005820998747623016
+    ],
+    "p_value": 0.07440965529691913
+  },
+  "guardrail": {
+    "mean_control": 52.45626398210291,
+    "mean_treatment": 51.29877552814966,
+    "median_control": 17.0,
+    "median_treatment": 16.0,
+    "skew_control": 163.70437695548333,
+    "skew_treatment": 5.967091125563528,
+    "outlier_userid": 6390605,
+    "outlier_rounds": 49854,
+    "mean_diff_all": -1.157488453953249,
+    "mean_diff_trimmed": -0.04333503360787461,
+    "boot_ci_all": [
+      -4.07926645600286,
+      0.9781293191908152
+    ],
+    "boot_ci_trimmed": [
+      -1.3829879718271225,
+      1.3244588329847486
+    ],
+    "mannwhitney_p": 0.05020880772044255,
+    "common_language_effect": 0.49623671809341224
+  },
+  "multiple_comparisons": {
+    "metrics": [
+      "7-day retention (PRIMARY)",
+      "1-day retention (secondary)",
+      "game rounds (guardrail, MWU)"
+    ],
+    "p_raw": [
+      0.001554249975614329,
+      0.07440965529691913,
+      0.05020880772044255
+    ],
+    "p_bh": [
+      0.004662749926842988,
+      0.07440965529691913,
+      0.07440965529691913
+    ],
+    "reject_bh": [
+      true,
+      false,
+      false
+    ]
+  }
+}
