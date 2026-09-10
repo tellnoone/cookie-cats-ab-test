@@ -1,0 +1,20 @@
+====================================================================
+CONTROL-ARM BASELINE  (pre-registration input)
+====================================================================
+
+Group sizes (assignment data, not outcome data):
+  gate_30     44,700
+  gate_40     45,489
+  total       90,189
+
+Control arm (gate_30), n = 44,700
+--------------------------------------------------------------------
+  7-day retention (PRIMARY baseline) : 19.0201%
+  1-day retention (secondary)        : 44.8188%
+  mean game rounds  (guardrail)      : 52.46
+  median game rounds                 : 17.0
+
+Treatment arm outcomes: BLINDED, not computed.
+
+=> Use baseline 7-day retention = 19.02% to finalise the Section 3 MDE.
+====================================================================
