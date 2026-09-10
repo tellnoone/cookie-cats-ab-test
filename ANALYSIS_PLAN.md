@@ -318,4 +318,68 @@ here with its reason and the date, rather than edited into the sections above.*
 
 | Date | Section | Change | Reason |
 |---|---|---|---|
-| | | | |
+| 2026-09-10 | 4 | **SRM check failed.** Recorded, not edited away. | χ² = 6.90, p = 0.0086, below the 0.01 trigger. The section 4 contingency was executed as written; see below. |
+| 2026-09-10 | 4 | Covariate balance run on `userid` only. | No true pre-treatment covariates exist in the dataset — no country, device, install date or channel. `userid` is the sole treatment-independent field. Logged because the plan asked for balance on "any characteristics available" and the honest answer is "almost none were". |
+| 2026-09-10 | 6 | **Outlier handling for the guardrail was not pre-specified.** Results reported both with and without the outlier. | One control-arm user (`userid` 6390605) logged 49,854 rounds in 14 days, 17× the next-highest player. That single row *is* the entire difference in guardrail means (−1.16 rounds with it, −0.04 without). Since no rule existed, both figures are reported and neither is hidden. No outlier rule was applied to the primary metric, which is binary and unaffected. |
+| 2026-09-10 | 6 | Added a deliberately **invalid** segment cut (`sum_gamerounds` buckets) as a demonstration. | Section 2 excluded this cut from the decision. It is shown in `05_segments.py` to make the exclusion concrete rather than asserted. It informs nothing; it is a worked example of the bias. |
+| 2026-09-10 | 6 | Bootstrap for the binary metrics drawn from the binomial rather than by literal row resampling. | Mathematically identical for the mean of a 0/1 vector, and avoids materialising a 10,000 × 90,189 array. The guardrail bootstrap, where the distribution shape matters, does resample rows. |
+| 2026-09-10 | 7 | CUPED and peeking demonstrated on simulated data, as the plan anticipated. | Confirmed on inspection: the snapshot has no timestamps and no pre-period. Not a deviation so much as the plan's own contingency being exercised. |
+
+### What the SRM failure meant in practice
+
+The plan said a failed SRM triggers investigation, "not a shrug". Recording what
+happened, since this is the deviation that mattered:
+
+**The test.** 44,700 control vs 45,489 treatment against an intended 50/50.
+&chi;<sup>2</sup> = 6.90, p = 0.0086. Below the 0.01 trigger.
+
+**The investigation** (section 4 contingency, steps 2–3). The hypothesis was
+post-assignment filtering of never-played installs. It does not hold:
+
+- Only **15%** of the +789 excess is attributable to zero-round users.
+- The zero-round *rate* does not differ between arms (p = 0.169).
+- **+669 of the excess persists** among users who played at least one round.
+
+One thing worth flagging about how this nearly went wrong. Re-running the SRM on
+active users only gives p = 0.0227, which sits back above the 0.01 trigger, and
+it would have been easy to write that up as "resolved on the clean subset".
+It is not resolved: dropping ~4,000 users lowers power and raises p on its own,
+0.0227 is still significant at 0.05, and the imbalance itself barely moved. The
+conclusion was therefore drawn from the decomposition of the excess rather than
+from which side of a threshold a smaller sample's p-value landed on. That is the
+shrug the plan was written to prevent, and it presented itself in exactly the
+form the plan anticipated.
+
+**Consequence.** Per step 1 of the contingency, no ship/no-ship decision is
+issued from the primary metric. The estimate is reported for its magnitude and
+the recommendation is step 5: re-run with assignment fixed.
+
+**Judgement, stated separately from the rule.** The imbalance is small in
+practical terms (49.56% / 50.44%), the arms show no detectable difference on the
+only treatment-independent covariate available, and the primary result is
+directionally stable across every cut examined. So the estimate is probably
+close to right. That is a *judgement*, and the pre-registered rule outranks it —
+which is the point of having fixed the rule in advance. Both are reported rather
+than one being quietly resolved into the other.
+
+### Outcome against section 8
+
+Section 8 named five conditions that would abandon the hypothesis. Three fired:
+
+- **Item 1** (CI upper bound below +1.0pp): the CI is [−1.33, −0.31]pp, entirely
+  below +1.0pp. Fired — and would have fired even had the effect been positive.
+- **Item 2** (negative point estimate): −0.82pp. Fired.
+- **Item 5** (SRM failure): fired.
+
+The two that did not fire: item 3 (1-day up, 7-day flat) — both horizons moved
+down together; and item 4 (guardrail degradation) — engagement was flat.
+
+The hypothesis that moving the gate to level 40 increases 7-day retention is
+abandoned. The competing hypothesis stated in section 1 — that the gate itself
+provides structure whose removal costs retention — is the one consistent with
+the data, and the pattern in section 2's secondary metric (harm growing from
+−1.3% relative at day 1 to −4.3% at day 7) fits it.
+
+Recording that the competing hypothesis was written down *before* the analysis,
+which is the only reason it can be cited now without it being a story invented
+to fit the result.

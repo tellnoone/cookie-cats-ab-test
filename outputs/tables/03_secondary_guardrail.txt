@@ -92,8 +92,8 @@ Guardrail: bootstrap on the difference in means
 ==========================================================================
 
   Difference in means (trt - ctl) : -1.1575 rounds
-  Bootstrap 95% percentile CI     : [-4.0793, +0.9781] rounds
-  P(treatment mean > control mean) : 18.4%
+  Bootstrap 95% percentile CI     : [-4.0028, +0.9863] rounds
+  P(treatment mean > control mean) : 19.2%
 
   The interval is wide and straddles zero. Note it is ASYMMETRIC -- the
   bootstrap inherits the outlier, which is the honest behaviour: resamples
@@ -101,7 +101,7 @@ Guardrail: bootstrap on the difference in means
   precisely the tail behaviour a normal approximation would have smoothed
   away, and the reason the plan asked for a bootstrap here.
 
-  Same bootstrap, outlier removed : -0.0433 rounds, CI [-1.3830, +1.3245]
+  Same bootstrap, outlier removed : -0.0433 rounds, CI [-1.3959, +1.3022]
   Symmetric now, and still straddling zero.
 
 ==========================================================================
