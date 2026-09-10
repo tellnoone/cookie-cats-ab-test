@@ -301,17 +301,23 @@ and **no outcome analysis code existed in the tree at that point**. Every
 subsequent commit is additive. `git log` shows the order things were decided in.
 
 ```
-9d40a16 Pre-register analysis plan for Cookie Cats gate placement test
-79cc782 Add section 4 validation checks; SRM fails at the pre-registered trigger
-5fec294 Primary analysis: 7-day retention is LOWER on gate_40
-bef2bf2 Add secondary/guardrail analysis and power analysis
-09f6add Add exploratory segment analysis, contrasting a valid and an invalid cut
-c978a58 Add section 7 simulations: peeking, multiple comparisons, CUPED
-22f82f0 Add README, deviation log, pipeline runner and a report auditor
-0622290 Fix two figure defects found by reading the rendered PNGs
+1. Pre-register analysis plan for Cookie Cats gate placement test
+2. Add section 4 validation checks; SRM fails at the pre-registered trigger
+3. Primary analysis: 7-day retention is LOWER on gate_40
+4. Add secondary/guardrail analysis and power analysis
+5. Add exploratory segment analysis, contrasting a valid and an invalid cut
+6. Add section 7 simulations: peeking, multiple comparisons, CUPED
 ```
 
-Read top to bottom: the plan is committed first, the validation failure is committed before the primary result, and the result is committed before anything that interprets it.
+That order is the argument. The plan is committed first, and the tree at that
+commit contains no outcome-analysis code -- verify with
+`git show --stat $(git rev-list --max-parents=0 HEAD)`. The validation failure is
+committed before the primary result, and the result before anything that
+interprets it. Commits 7 onward are documentation and tidy-up.
+
+Check the ordering yourself with `git log --reverse --format='%s'`. Commit hashes
+are deliberately not quoted here: they change on any history rewrite, and it is
+the sequence that carries the claim, not the hashes.
 
 ---
 
