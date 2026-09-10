@@ -142,17 +142,29 @@ would apply if this were live.
 These run first. If any fails, the outcome analysis does not proceed until the
 failure is understood.
 
-- [ ] **Sample Ratio Mismatch.** Chi-square test of observed group sizes against the
+- [x] **Sample Ratio Mismatch.** Chi-square test of observed group sizes against the
       intended allocation ratio. A significant SRM means assignment or logging is
       broken and the comparison is untrustworthy regardless of what the outcome
       data says.
       *Threshold:* p < 0.01 on the SRM test triggers investigation, not a shrug.
-- [ ] **Duplicate user IDs.** Each user appears exactly once.
-- [ ] **Cross-contamination.** No user appears in both arms.
-- [ ] **Covariate balance.** Groups are comparable on any pre-treatment or
+      &rarr; **RAN 2026-09-10: FAILED.** &chi;<sup>2</sup> = 6.90, p = 0.0086.
+      Contingency executed; see Section 9.
+- [x] **Duplicate user IDs.** Each user appears exactly once.
+      &rarr; **RAN 2026-09-10: PASS.** 90,189 rows, 90,189 unique ids, 0 duplicates.
+- [x] **Cross-contamination.** No user appears in both arms.
+      &rarr; **RAN 2026-09-10: PASS.** 0 users in both arms.
+- [x] **Covariate balance.** Groups are comparable on any pre-treatment or
       treatment-independent characteristics available.
-- [ ] **Missingness.** Extent and pattern of missing outcome data, and whether it
+      &rarr; **RAN 2026-09-10: PASS, but weakly.** No true pre-treatment covariates
+      exist in this dataset. `userid` is the only treatment-independent field;
+      KS p = 0.36, Mann-Whitney p = 0.26. This is weak reassurance, not covariate
+      balance in the usual sense.
+- [x] **Missingness.** Extent and pattern of missing outcome data, and whether it
       differs by arm. Differential missingness is itself a finding.
+      &rarr; **RAN 2026-09-10: PASS.** Zero missing values in any column, so
+      differential missingness cannot arise. Note this is a statement about the
+      snapshot's completeness, not about attrition: a player who never returned is
+      encoded `retention = False`, not as missing.
 
 **If SRM fails:** the outcome analysis does not become the headline. In order:
 
@@ -324,6 +336,7 @@ here with its reason and the date, rather than edited into the sections above.*
 | 2026-09-10 | 6 | Added a deliberately **invalid** segment cut (`sum_gamerounds` buckets) as a demonstration. | Section 2 excluded this cut from the decision. It is shown in `05_segments.py` to make the exclusion concrete rather than asserted. It informs nothing; it is a worked example of the bias. |
 | 2026-09-10 | 6 | Bootstrap for the binary metrics drawn from the binomial rather than by literal row resampling. | Mathematically identical for the mean of a 0/1 vector, and avoids materialising a 10,000 × 90,189 array. The guardrail bootstrap, where the distribution shape matters, does resample rows. |
 | 2026-09-10 | 7 | CUPED and peeking demonstrated on simulated data, as the plan anticipated. | Confirmed on inspection: the snapshot has no timestamps and no pre-period. Not a deviation so much as the plan's own contingency being exercised. |
+| 2026-09-10 | 4 | Ticked the five validation checkboxes and appended each check's outcome inline. | The preamble forbids silent edits above this log, so the edit is recorded here. A checkbox is a status marker rather than part of the specification, and no check's definition or threshold was altered — only its result was added. Full output: `outputs/tables/01_validation.txt`. |
 
 ### What the SRM failure meant in practice
 
