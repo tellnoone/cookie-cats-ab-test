@@ -1,0 +1,120 @@
+==========================================================================
+SEGMENT ANALYSIS -- EXPLORATORY ONLY
+==========================================================================
+
+  Per plan section 6: hypothesis-generating, not decision-making. Nothing
+  below changes the recommendation. Any interesting slice becomes the
+  subject of its own pre-registered test, not a reason to revisit this one.
+
+==========================================================================
+A. LEGITIMATE CUT: userid decile (treatment-independent)
+==========================================================================
+
+  If userids are issued in install order, deciles approximate install
+  cohorts. Crucially, a user's id cannot be affected by which gate they got,
+  so this cut does not condition on anything the treatment touched.
+
+   decile    n ctl    n trt      ctl      trt   diff pp    p raw     p BH
+        1    4,474    4,545  19.54%   17.95%    -1.581   0.0543   0.1811
+        2    4,486    4,533  18.79%   18.53%    -0.261   0.7504   0.8917
+        3    4,507    4,512  18.79%   18.91%     0.112   0.8917   0.8917
+        4    4,542    4,477  19.07%   17.49%    -1.577   0.0527   0.1811
+        5    4,391    4,628  19.34%   18.34%    -0.990   0.2293   0.4585
+        6    4,471    4,547  19.84%   18.03%    -1.805   0.0287   0.1811
+        7    4,487    4,532  18.70%   18.82%     0.123   0.8808   0.8917
+        8    4,474    4,545  18.44%   18.09%    -0.354   0.6635   0.8917
+        9    4,450    4,569  18.70%   18.19%    -0.509   0.5333   0.8888
+       10    4,418    4,601  19.01%   17.65%    -1.365   0.0939   0.2348
+
+  Segments significant at raw alpha = 0.05 : 1 of 10
+  Segments significant after Benjamini-Hochberg : 0 of 10
+
+  All 10 diffs negative? False
+  Direction split: 8 negative, 2 positive
+
+  This is the useful reading. The primary effect is small, so individual
+  deciles at ~4,500 per arm are badly underpowered -- each has roughly a
+  third of the sample needed to see a 0.8pp effect. Most deciles will look
+  'not significant' whatever the truth is, and one or two may look large by
+  chance. The consistency of the SIGN across deciles is more informative
+  than any single decile's p-value.
+
+==========================================================================
+B. THE WRONG CUT: segmenting by sum_gamerounds (post-treatment)
+==========================================================================
+
+  Section 2 excluded this from the decision. Here is why, with numbers.
+
+  `sum_gamerounds` is measured AFTER the gate takes effect. The gate is
+  literally a device that stops people playing, so the treatment changes
+  this variable. Splitting on it compares groups that are not like-for-like:
+  a given bucket means something different in each arm.
+
+     rounds    n ctl    n trt      ctl      trt   diff pp    p raw
+          0    1,937    2,057   0.83%    0.63%    -0.194   0.4704
+        1-5   10,119   10,604   1.29%    1.44%     0.148   0.3588
+       6-20   12,428   12,657   5.03%    4.75%    -0.281   0.3027
+      21-40    6,928    6,571  13.89%   12.72%    -1.163   0.0468
+      41-80    5,750    5,793  30.45%   27.21%    -3.247   0.0001
+     81-160    3,955    4,207  53.58%   51.96%    -1.617   0.1437
+       160+    3,583    3,600  80.88%   80.94%     0.063   0.9463
+
+  What is actually wrong here needs stating carefully, because the obvious
+  reading is not the right one.
+
+  2 of 7 buckets show a positive difference, but they are
+  the two smallest effects in the table:
+        1-5 : +0.148 pp  (p = 0.3588)
+       160+ : +0.063 pp  (p = 0.9463)
+  Those are noise, not a sign reversal. This is NOT Simpson's paradox, and
+  calling it that would be overclaiming -- the aggregate sign does not
+  genuinely flip inside any well-populated bucket.
+
+  The real distortion is one of MAGNITUDE:
+    aggregate effect           : -0.82 pp
+    worst bucket ( 41-80)      : -3.25 pp  (p = 0.0001)
+    ratio                      : 4.0x the aggregate
+
+  Conditioning on a post-treatment variable manufactures effects several
+  times larger than the real one. A reader shown only that row would
+  conclude the gate change costs mid-engagement players 3.2pp of retention,
+  which is roughly four times the actual aggregate harm.
+
+  The smoking gun -- bucket membership itself differs by arm:
+
+       bucket    gate_30    gate_40    shift
+            0     4.33%      4.52%   +0.19pp
+          1-5    22.64%     23.31%   +0.67pp
+         6-20    27.80%     27.82%   +0.02pp
+        21-40    15.50%     14.45%   -1.05pp
+        41-80    12.86%     12.73%   -0.13pp
+       81-160     8.85%      9.25%   +0.40pp
+         160+     8.02%      7.91%   -0.10pp
+
+    chi-square on membership : 27.57, p = 0.0001
+
+    Significant. The treatment MOVED people between buckets, which is
+    direct proof that the conditioning variable is treatment-affected.
+
+  That is the whole objection in one line. When the treatment changes which
+  bucket you land in, comparing arms WITHIN a bucket is comparing different
+  populations. The gate at level 30 stops control players earlier, so a
+  control player who still reached 80+ rounds pushed through a gate while a
+  treatment player who reached 80+ rounds did not. Same bucket, different
+  kind of player.
+
+  Had this cut not been excluded in advance, it would have supplied a
+  tempting and false story with a very convincing p-value attached
+  (p = 0.0001 on the worst bucket). Pre-registration is what
+  makes it unavailable.
+
+==========================================================================
+SEGMENT CONCLUSION
+==========================================================================
+
+  No segment changes the recommendation, and none was permitted to. The
+  userid cut shows a consistent sign with intervals too wide to say more.
+  The rounds cut shows why the plan excluded it.
+
+  If anything here were to be pursued, it would be pursued as a NEW
+  pre-registered experiment with its own primary metric and its own MDE.
