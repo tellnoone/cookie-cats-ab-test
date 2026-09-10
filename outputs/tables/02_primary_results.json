@@ -1,0 +1,22 @@
+{
+  "n_control": 44700,
+  "n_treatment": 45489,
+  "rate_control": 0.19020134228187918,
+  "rate_treatment": 0.18200004396667327,
+  "abs_diff": -0.008201298315205913,
+  "rel_lift": -0.043119034896460164,
+  "z": -3.164358912748191,
+  "p_value": 0.001554249975614329,
+  "ci_lower": -0.013281552418885545,
+  "ci_upper": -0.0031210442115262808,
+  "se": 0.0025920140082940444,
+  "boot_ci_lower": -0.013211309954571203,
+  "boot_ci_upper": -0.003208531164920625,
+  "boot_p_treatment_wins": 0.0007,
+  "significant": true,
+  "ci_spans_zero": false,
+  "ci_below_mde": true,
+  "matched_rule": "Effect is negative and significant",
+  "verdict": "DO NOT SHIP -- investigate whether the gate serves a function we did not anticipate",
+  "conditional_on_failed_validation": true
+}

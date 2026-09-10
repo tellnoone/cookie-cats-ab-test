@@ -1,0 +1,98 @@
+==========================================================================
+PRIMARY METRIC: 7-DAY RETENTION
+==========================================================================
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!  READ THIS BEFORE THE RESULT
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  Validation FAILED 1 of 5 checks. Sample Ratio
+  Mismatch: p = 0.008608, below the pre-registered 0.01 trigger.
+
+  Per ANALYSIS_PLAN.md section 4, this analysis is CONDITIONAL. The arms are
+  not demonstrably exchangeable, so no ship/no-ship decision is drawn from
+  the primary metric below. The estimate is reported because its magnitude
+  is informative, but it is evidence from a compromised experiment.
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+==========================================================================
+Observed retention
+==========================================================================
+
+  arm                  n   retained      rate
+  gate_30 (ctl)    44,700      8,502 19.0201%
+  gate_40 (trt)    45,489      8,279 18.2000%
+
+  Absolute difference (trt - ctl) : -0.8201 pp
+  Relative lift                   : -4.312%  (on a 19.02% baseline)
+
+  The relative figure is shown with the baseline attached because a
+  '4% change in retention' means nothing without knowing 4% of what.
+
+==========================================================================
+Two-proportion z-test (plan section 6)
+==========================================================================
+
+  z statistic          : -3.1644
+  p-value (two-sided)  : 0.0016
+  alpha                : 0.05
+
+  Difference           : -0.8201 pp
+  95% CI (normal)      : [-1.3282, -0.3121] pp
+  SE of difference     : 0.2592 pp
+
+  Chi-square cross-check : chi2 = 10.0132, p = 0.0016
+  (Equivalent to the z-test, as the plan notes. Agreement is a sanity check.)
+
+==========================================================================
+Bootstrap (10,000 iterations, percentile CI)
+==========================================================================
+
+  Resampling with replacement WITHIN each arm, so arm sizes are preserved
+  and only sampling variation in the outcome is simulated.
+
+  Bootstrap mean difference : -0.8263 pp
+  Bootstrap SE              : 0.2574 pp
+  95% percentile CI         : [-1.3211, -0.3209] pp
+
+  Agreement with the normal-approximation CI above is expected here: n is
+  large and p is near 0.19, so the approximation is comfortable. The
+  bootstrap is reported because it does not RELY on that being true.
+
+--------------------------------------------------------------------------
+  For a non-technical stakeholder:
+
+    In 0.1% of 10,000 simulated re-runs of this experiment,
+    the gate-40 arm had higher 7-day retention than gate-30.
+    In 99.9% of them, gate-30 was higher.
+
+    A coin-flip result would be 50%. This is not that.
+--------------------------------------------------------------------------
+
+==========================================================================
+DECISION RULE (plan section 3, applied literally)
+==========================================================================
+
+  MDE threshold        : 1.0 pp absolute
+  Observed difference  : -0.8201 pp
+  95% CI               : [-1.3282, -0.3121] pp
+
+  statistically significant at 0.05   : True
+  CI spans zero                     : False
+  CI lower bound exceeds MDE        : False
+  CI entirely below the MDE         : True
+
+  Matched rule : Effect is negative and significant
+  Pre-registered verdict : DO NOT SHIP -- investigate whether the gate serves a function we did not anticipate
+
+  Additionally, the whole interval lies below +1.0pp. Per section 8 item 1,
+  this abandons the hypothesis for decision purposes: even the optimistic
+  end of what the data supports is not worth shipping.
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  BUT: validation failed. Per section 4, the above verdict is NOT issued as
+  the recommendation. The recommendation is to re-run the test with
+  assignment fixed. See section 9 of the plan for the deviation log.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
