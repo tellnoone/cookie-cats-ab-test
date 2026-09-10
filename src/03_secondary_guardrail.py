@@ -296,11 +296,23 @@ axes[0].annotate(f"mean\n{g_c.mean():.0f}", xy=(g_c.mean(), 0),
                  xytext=(66, 0.013), fontsize=8, color="#b3452c")
 axes[0].legend(fontsize=8)
 
-axes[1].hist(np.log1p(g_c), bins=60, alpha=0.6, label=CONTROL, density=True)
-axes[1].hist(np.log1p(g_t), bins=60, alpha=0.6, label=TREATMENT, density=True)
-axes[1].set_title("log1p(game rounds)\nspike at 0 = never played")
-axes[1].set_xlabel("log(1 + total game rounds)")
+# Exact counts for the low range. Binning log1p of integer counts leaves a
+# comb of empty buckets at small values, which reads as structure that is not
+# there. Plotting the exact counts is both honest and more informative.
+kmax = 30
+ks = np.arange(0, kmax + 1)
+prop_c = np.array([(g_c == k).mean() for k in ks]) * 100
+prop_t = np.array([(g_t == k).mean() for k in ks]) * 100
+bw = 0.42
+axes[1].bar(ks - bw / 2, prop_c, bw, label=f"{CONTROL} (control)", alpha=0.85)
+axes[1].bar(ks + bw / 2, prop_t, bw, label=f"{TREATMENT} (treatment)", alpha=0.85)
+axes[1].set_title(f"Exact round counts 0-{kmax}\n"
+                  f"{(g_c == 0).mean():.1%} of players never played at all")
+axes[1].set_xlabel("total game rounds (exact)")
+axes[1].set_ylabel("% of arm")
 axes[1].legend(fontsize=8)
+axes[1].grid(alpha=0.25, axis="y")
+axes[1].grid(alpha=0.25, axis="y")
 
 for arr, lab in ((g_c, CONTROL), (g_t, TREATMENT)):
     xs = np.sort(arr)

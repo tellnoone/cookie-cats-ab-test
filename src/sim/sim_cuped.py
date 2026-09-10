@@ -274,7 +274,7 @@ ax.grid(alpha=0.25)
 
 ax = axes[2]
 labels = ["plain", "CUPED"]
-vals = [n_plain, n_cuped]
+vals = [np.ceil(n_plain), np.ceil(n_cuped)]  # match the reported figures
 bars = ax.bar(labels, vals, color=["#b3452c", "#1f4e79"], alpha=0.88)
 for b, v in zip(bars, vals):
     ax.text(b.get_x() + b.get_width() / 2, v * 1.01, f"{v:,.0f}", ha="center",
