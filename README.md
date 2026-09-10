@@ -298,13 +298,17 @@ and **no outcome analysis code existed in the tree at that point**. Every
 subsequent commit is additive. `git log` shows the order things were decided in.
 
 ```
-c978a58  Add section 7 simulations: peeking, multiple comparisons, CUPED
-09f6add  Add exploratory segment analysis, contrasting a valid and an invalid cut
-bef2bf2  Add secondary/guardrail analysis and power analysis
-5fec294  Primary analysis: 7-day retention is LOWER on gate_40
-79cc782  Add section 4 validation checks; SRM fails at the pre-registered trigger
-9d40a16  Pre-register analysis plan for Cookie Cats gate placement test
+9d40a16 Pre-register analysis plan for Cookie Cats gate placement test
+79cc782 Add section 4 validation checks; SRM fails at the pre-registered trigger
+5fec294 Primary analysis: 7-day retention is LOWER on gate_40
+bef2bf2 Add secondary/guardrail analysis and power analysis
+09f6add Add exploratory segment analysis, contrasting a valid and an invalid cut
+c978a58 Add section 7 simulations: peeking, multiple comparisons, CUPED
+22f82f0 Add README, deviation log, pipeline runner and a report auditor
+0622290 Fix two figure defects found by reading the rendered PNGs
 ```
+
+Read top to bottom: the plan is committed first, the validation failure is committed before the primary result, and the result is committed before anything that interprets it.
 
 ---
 
