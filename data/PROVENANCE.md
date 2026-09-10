@@ -39,3 +39,21 @@ unmodified original rather than one analyst's edited copy.
   peeking/sequential-testing and CUPED cannot be demonstrated on it (see plan §7).
 - No revenue or session fields, so the metric the gate most directly targets is
   unobservable here (see plan §2).
+
+## Licensing and ownership
+
+The repository's MIT `LICENSE` covers the analysis code, the analysis plan and
+the written reports. **It does not cover this dataset.**
+
+`raw/cookie_cats.csv` is redistributed here so the analysis is reproducible. It
+is not the author's work: it is the Cookie Cats A/B test dataset originally
+distributed by DataCamp and widely mirrored. No ownership is claimed over it and
+no licence is asserted on it.
+
+If you hold the rights and want it removed, open an issue. The analysis does not
+depend on the file being vendored: the path is defined in two places only --
+`src/common.py:RAW`, which the eight analysis and simulation scripts import, and
+`src/00_baseline_peek.py:RAW`, which defines its own copy because it predates
+`common.py` and is deliberately self-contained (it is the pre-registration
+artefact and depends on no later code). Repointing both at a download of the URL
+above is a two-line change.

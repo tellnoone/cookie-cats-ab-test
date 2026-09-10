@@ -19,17 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-## Scope
-
-This licence covers the analysis code, the analysis plan, and the written
-reports in this repository.
-
-It does NOT cover `data/raw/cookie_cats.csv`. That dataset is redistributed
-here for reproducibility and is not the author's work. It is the Cookie Cats
-A/B test dataset originally distributed by DataCamp and widely mirrored; the
-author makes no ownership claim over it and asserts no licence on it. See
-`data/PROVENANCE.md` for its source and integrity record. If you are the
-rights holder and want it removed, open an issue.
