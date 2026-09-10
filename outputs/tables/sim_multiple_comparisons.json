@@ -1,0 +1,14 @@
+{
+  "note": "SIMULATED DATA. Not a finding about Cookie Cats.",
+  "n_sims": 5000,
+  "k_metrics": 5,
+  "n_per_arm": 20000,
+  "alpha": 0.05,
+  "theoretical_fwer": 0.22621906250000023,
+  "observed_fwer_uncorrected": 0.2294,
+  "observed_fwer_bonferroni": 0.051,
+  "observed_fwer_bh": 0.0526,
+  "power_uncorrected": 0.7166,
+  "power_bonferroni": 0.4759,
+  "power_bh": 0.5415
+}

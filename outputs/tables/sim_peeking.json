@@ -1,0 +1,26 @@
+{
+  "note": "SIMULATED DATA. Not a finding about Cookie Cats.",
+  "n_sims": 2000,
+  "n_final_per_arm": 20000,
+  "n_looks": 10,
+  "true_effect": 0.0,
+  "nominal_alpha": 0.05,
+  "fpr_single_test": 0.0475,
+  "fpr_peeking": 0.1965,
+  "inflation_factor": 3.93,
+  "fpr_obf_corrected": 0.0505,
+  "obf_first_look_nominal_p": 9.384049190965149e-11,
+  "obf_final_look_nominal_p": 0.04055348552434402,
+  "cumulative_fpr_by_look": [
+    0.0455,
+    0.0865,
+    0.1105,
+    0.1295,
+    0.142,
+    0.155,
+    0.167,
+    0.1765,
+    0.1865,
+    0.1965
+  ]
+}

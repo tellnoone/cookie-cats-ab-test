@@ -1,0 +1,90 @@
+==========================================================================
+SIMULATION: MULTIPLE COMPARISONS  (simulated data -- NOT Cookie Cats)
+==========================================================================
+
+  **********************************************************************
+  *  Every number below is generated in this script. None of it is a     *
+  *  result about Cookie Cats.                                           *
+  **********************************************************************
+
+  Simulations     : 5,000
+  Metrics tested  : 5
+  Users per arm   : 20,000
+  Baseline        : 19%
+  alpha           : 0.05
+
+==========================================================================
+1. THE ARITHMETIC
+==========================================================================
+
+  If all 5 null hypotheses are true and the tests are independent, the
+  chance of at least one false positive is:
+
+    1 - (1 - 0.05)^5  =  1 - 0.95^5  =  0.2262
+
+  So 22.6%, not 5%. Testing five metrics at 0.05 each means
+  roughly a 1-in-4 chance of finding a 'winner' that does not exist.
+
+    k metrics   P(>=1 false positive)
+            1                   5.0%
+            2                   9.8%
+            3                  14.3%
+            5                  22.6%
+           10                  40.1%
+           20                  64.2%
+
+==========================================================================
+2. SIMULATED: five metrics, NO real effects anywhere
+==========================================================================
+
+  P(at least one 'significant' metric):
+
+    uncorrected        :  22.94%   (theory 22.62%)
+    Bonferroni         :   5.10%   (target <= 5%)
+    Benjamini-Hochberg :   5.26%   (target <= 5%)
+
+  Per-metric false-positive rate (each should be ~5%):
+    metric 1 : 5.34%
+    metric 2 : 4.70%
+    metric 3 : 4.90%
+    metric 4 : 5.76%
+    metric 5 : 4.90%
+
+  Each individual test is perfectly well calibrated. The problem is not
+  any one test -- it is the decision rule 'ship if ANY metric wins', which
+  is a different and much less stringent test than it appears to be.
+
+==========================================================================
+3. WHAT CORRECTION COSTS (two metrics genuinely move)
+==========================================================================
+
+  Correction is not free. Here metrics 1 and 2 have a true +1.0pp effect
+  and metrics 3-5 are null. Power is the chance of detecting a REAL effect.
+
+    metric   true effect   uncorrected   Bonferroni       BH
+         1        1.0pp       71.94%       48.04%   54.74%   <- real
+         2        1.0pp       71.38%       47.14%   53.56%   <- real
+         3        0.0pp        5.38%        0.86%    2.18%   <- null
+         4        0.0pp        4.78%        1.12%    2.34%   <- null
+         5        0.0pp        4.98%        1.12%    2.42%   <- null
+
+  Averaged over the metrics that genuinely moved (POWER, higher is better):
+    uncorrected        : 71.66%
+    Bonferroni         : 47.59%
+    Benjamini-Hochberg : 54.15%
+
+  Averaged over the null metrics (FALSE POSITIVES, lower is better):
+    uncorrected        : 5.05%
+    Bonferroni         : 1.03%
+    Benjamini-Hochberg : 2.31%
+
+  This is the trade, and it is why BH is usually preferred to Bonferroni
+  for a family of reported metrics: it controls the false DISCOVERY rate
+  rather than the family-wise error rate, giving up less power for a
+  slightly weaker guarantee.
+
+  But note what neither correction can do: recover the clarity of having
+  said in advance which metric decides. That is the point of section 2
+  naming a single primary metric -- correction is damage control, and
+  pre-specification is prevention.
+

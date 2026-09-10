@@ -1,0 +1,19 @@
+{
+  "note": "SIMULATED DATA. Not a finding about Cookie Cats.",
+  "n_sims": 2000,
+  "n_per_arm": 10000,
+  "true_effect": 0.01,
+  "correlation_x_y": 0.4846137499100131,
+  "theoretical_var_reduction": 0.23485048660184474,
+  "observed_var_reduction": 0.24885188220537424,
+  "se_reduction": 0.11963911461142573,
+  "bias_plain_pp": -0.003295000000000034,
+  "bias_cuped_pp": -9.86902875617715e-05,
+  "n_required_plain": 24352.0,
+  "n_required_cuped": 18292.0,
+  "sample_saving": 0.24885188220537435,
+  "power_plain": 0.4205,
+  "power_cuped": 0.5225,
+  "type1_plain": 0.03833333333333333,
+  "type1_cuped": 0.04
+}
