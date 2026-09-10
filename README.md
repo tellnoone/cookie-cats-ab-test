@@ -262,14 +262,17 @@ src/
 outputs/
   tables/                 Text reports + JSON for programmatic use
   figures/                PNGs
-run_all.py                Runs everything in plan order
+run_all.py                Runs the nine steps in plan order
+verify_report.py          Checks all 67 figures quoted in this README
+                          against the JSON the scripts produced
 ```
 
 ### Reproducing
 
 ```bash
 pip install -r requirements.txt
-python run_all.py
+python run_all.py        # ~45s
+python verify_report.py  # confirms this README matches the outputs
 ```
 
 Seeded (`SEED = 20260910` in `src/common.py`), so bootstrap and simulation
