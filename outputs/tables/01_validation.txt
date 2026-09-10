@@ -1,0 +1,136 @@
+==========================================================================
+VALIDATION CHECKS  (plan section 4) -- run before outcome analysis
+==========================================================================
+
+Rows loaded: 90,189
+Columns:     userid, version, sum_gamerounds, retention_1, retention_7
+
+==========================================================================
+1. SAMPLE RATIO MISMATCH
+==========================================================================
+
+  Intended allocation : 50 / 50
+     gate_30 (control)   :  44,700  (49.5626%)
+     gate_40 (treatment) :  45,489  (50.4374%)
+  expected per arm    :  45,094.5
+  difference          :    +789  (+0.875pp of total)
+
+  chi-square (1 df)   : 6.9024
+  p-value             : 0.008608
+  trigger threshold   : p < 0.01
+
+  >>> SRM CHECK FAILS. p is below the pre-registered 0.01 trigger.
+  >>> The plan's section 4 contingency applies. Investigating below;
+  >>> the outcome analysis is NOT permitted to report a ship decision.
+
+==========================================================================
+1b. SRM INVESTIGATION  (plan section 4 contingency, steps 2-3)
+==========================================================================
+
+Hypothesis under test: the imbalance is not broken randomisation but
+filtering applied AFTER assignment -- installs that never opened the game.
+Signature would be an arm-dependent mass of zero-round users.
+
+  zero-round users,  gate_30 :  1,937  (4.3333% of arm)
+  zero-round users,  gate_40 :  2,057  (4.5220% of arm)
+  difference in rate         : +0.1886pp   (chi2 p = 0.1686)
+
+  SRM re-run on active users only (sum_gamerounds > 0):
+       gate_30 :  42,763
+       gate_40 :  43,432
+    chi-square      : 5.1924   p = 0.022686
+
+  Decomposition of the arm-size excess:
+    excess overall            :   +789
+    excess among active users :   +669   (84.8% of it)
+    attributable to 0-round   :   +120   (15.2% of it)
+
+  Conclusion: the imbalance PERSISTS among active users. Only 15% of the
+  excess is attributable to never-played installs, and the zero-round rate
+  itself does not differ significantly between arms (p = 0.169). The
+  post-assignment-filtering explanation is therefore NOT supported.
+
+  Note on the p-values: p rises from 0.0086 to 0.0227 when zero-round users
+  are dropped, but that is mostly the loss of ~4,000 users, not the
+  imbalance resolving. p = 0.0227 is still significant at 0.05. Reading the
+  move across the 0.01 trigger as 'now passes' would be exactly the shrug
+  the plan forbids.
+
+==========================================================================
+2. DUPLICATE USER IDs
+==========================================================================
+
+  rows            : 90,189
+  unique userids  : 90,189
+  duplicate rows  : 0
+
+  PASS -- each user appears exactly once.
+
+==========================================================================
+3. CROSS-CONTAMINATION
+==========================================================================
+
+  users appearing in both arms : 0
+
+  PASS -- no user is in both arms.
+
+==========================================================================
+4. COVARIATE BALANCE
+==========================================================================
+
+  Stated plainly: this dataset has NO true pre-treatment covariates. There is
+  no country, device, install date, or acquisition channel. `sum_gamerounds`
+  and both retention flags are measured after the gate takes effect, so none
+  of them can be used to establish that the arms started comparable.
+
+  The one treatment-independent field is `userid`. If ids are issued in
+  install order -- the usual case -- then its distribution is a weak proxy for
+  when a player joined, and an imbalance would suggest the arms were drawn
+  from different time windows or id ranges.
+
+                               gate_30       gate_40
+  userid min                       116           377
+  userid 25th pct            2,505,469     2,517,171
+  userid median              4,983,631     5,007,329
+  userid 75th pct            7,481,497     7,510,762
+  userid max                 9,999,710     9,999,861
+  userid mean                4,987,564     5,009,073
+
+  KS test on userid distribution : D = 0.00615, p = 0.3604
+  Mann-Whitney U on userid       : p = 0.2609
+
+  No detectable imbalance on the only treatment-independent field available.
+  This is weak reassurance, not covariate balance in the usual sense.
+
+==========================================================================
+5. MISSINGNESS
+==========================================================================
+
+  Missing values by column:
+    userid                  0  (0.0000%)
+    version                 0  (0.0000%)
+    sum_gamerounds          0  (0.0000%)
+    retention_1             0  (0.0000%)
+    retention_7             0  (0.0000%)
+
+  No missing values anywhere, so differential missingness by arm cannot
+  arise. Note what this does NOT mean: a player who never returned is
+  recorded as retention = False, not as missing. Absent players are encoded
+  as negative outcomes rather than dropped, which is the right encoding here
+  but means 'no missingness' is a statement about the snapshot's
+  completeness, not about attrition.
+
+==========================================================================
+VALIDATION SUMMARY
+==========================================================================
+
+  [FAIL]  Sample Ratio Mismatch
+  [PASS]  Duplicate user IDs
+  [PASS]  Cross-contamination
+  [PASS]  Covariate balance
+  [PASS]  Missingness
+
+  1 of 5 checks FAILED.
+  Per plan section 4, the outcome analysis proceeds only as a CONDITIONAL
+  analysis, with the failure reported ahead of any result and no ship
+  decision drawn from the primary metric.
