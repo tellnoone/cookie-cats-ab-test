@@ -1,5 +1,7 @@
 # Cookie Cats — Gate Placement A/B Test
 
+[![Reproduce](https://github.com/tellnoone/cookie-cats-ab-test/actions/workflows/reproduce.yml/badge.svg)](https://github.com/tellnoone/cookie-cats-ab-test/actions/workflows/reproduce.yml)
+
 A pre-registered analysis of whether moving a mobile game's first progression
 gate from level 30 to level 40 improves player retention.
 
@@ -276,8 +278,8 @@ python verify_report.py  # confirms this README matches the outputs
 ```
 
 Seeded (`SEED = 20260910` in `src/common.py`), so bootstrap and simulation
-figures reproduce exactly. Runtime is a couple of minutes, dominated by the
-guardrail bootstrap.
+figures reproduce exactly. Runtime is under a minute, dominated by the
+guardrail bootstrap. CI re-runs both commands on every push.
 
 ---
 

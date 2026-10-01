@@ -1,0 +1,20 @@
+name: Reproduce
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Re-run the full analysis from the raw data
+        run: python run_all.py
+      - name: Check every figure quoted in the README against the fresh outputs
+        run: python verify_report.py
